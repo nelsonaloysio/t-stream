@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 import sys
 import subprocess
 import json
@@ -35,7 +35,6 @@ def parse_config():
     config_path = os.path.join(app_dir , "config.json")
 
     default_value = ("webtorrent" , "mpv")
-    players = ["mpv" , "vlc"]
     clients = ["webtorrent" , "peerflix"]
 
     if not Path(config_path).is_file():
@@ -43,13 +42,13 @@ def parse_config():
 
     with open(config_path) as f:
         config = json.loads(f.read())
-    
+
     if config["config"]["player"] and config["config"]["client"]:
-        if config["config"]["player"] in players and config["config"]["client"] in clients:
+        if config["config"]["client"] in clients:
             return (  config["config"]["client"] , config["config"]["player"] )
-    
+
     return default_value
-        
+
 def stream(mag_url):
     client , player = parse_config()
     subprocess.run([client , mag_url , f"--{player}" ])
